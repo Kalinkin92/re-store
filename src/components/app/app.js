@@ -1,18 +1,30 @@
 import React from 'react';
-import ErrorBoundry from '../error-boundry';
-import { withBookstoreService } from '../hoc';
+import { Route, Switch } from 'react-router-dom';
 
-const App = ({ bookstoreService }) => {
+import { HomePage, CartPage } from '../pages';
+import ShopHeader from '../header';
 
-    console.log(bookstoreService.getBooks());
+const App = () => {
 
     return (
-        <ErrorBoundry>
-            <div className="container">
-                <h2>Hello world</h2>
-            </div>
-        </ErrorBoundry>
+        <main role="main" className="container">
+            <ShopHeader numItems={5} total={210} />
+            <Switch>
+                <Route
+                    path="/"
+                    component={HomePage}
+                    exact
+                    // render={() => <span>HOMEPAGE</span>}
+                />
+                <Route
+                    path="/cart"
+                    component={CartPage}
+                    exact
+                    // render={() => <span>HOMEPAGE</span>}
+                />
+            </Switch>
+        </main>
     )
 };
 
-export default withBookstoreService()(App);
+export default App;
