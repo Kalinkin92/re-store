@@ -3,12 +3,12 @@ const initialState = {
     loading: true,
     error: null,
     cartItems: [
-        {
+        /*{
             id: 1001, title: 'A book 1', count: 3, total: 150
         },
         {
             id: 1002, title: 'A book 2', count: 1, total: 70
-        },
+        },*/
     ],
     orderTotal: 0
 };
@@ -36,7 +36,7 @@ const updateCartItem = (book, item = {}) => {
         id,
         title,
         count: count + 1,
-        total: total + book.price
+        total: (count + 1) * book.price
     };
 };
 
@@ -88,6 +88,27 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 cartItems: [
                     ...state.cartItems.slice(0, idx),
+                    ...state.cartItems.slice(idx + 1)
+                ]
+            }
+        }
+
+        case 'BOOK_DECREASE_COUNT': {
+            // console.log(action.type);
+            const id = action.payload;
+            const book = state.books.find((book) => book.id === id);
+            const idx = state.cartItems.findIndex((item) => item.id === id);
+            const item = state.cartItems[idx];
+            const { count, total } = item;
+            return {
+                ...state,
+                cartItems: [
+                    ...state.cartItems.slice(0, idx),
+                    {
+                        ...item,
+                        count: count > 1 ? count - 1 : count,
+                        total: count > 1 ? (count - 1) * book.price : total
+                    },
                     ...state.cartItems.slice(idx + 1)
                 ]
             }
